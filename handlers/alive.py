@@ -10,6 +10,7 @@ from pyrogram.types import Message
 
 from time import time
 from datetime import datetime
+from config import DEV_NAME as dn
 from config import BOT_NAME as bn, BOT_USERNAME, BOT_IMG, ASSISTANT_NAME, OWNER_NAME, UPDATES_CHANNEL, GROUP_SUPPORT
 from helpers.filters import command, other_filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -50,7 +51,7 @@ async def alive(client: Client, message: Message):
 
 ༄ **Bot : 6.0 LATEST**
 
-༄ **My Master : [{OWNER_NAME}](https://t.me/{OWNER_NAME})**
+༄ **My Master : [{dn}](https://t.me/{OWNER_NAME})**
 
 ༄ **Service Uptime : `{uptime}`**
 
