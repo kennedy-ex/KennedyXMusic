@@ -70,8 +70,6 @@ async def start(client: Client, message: Message):
 
 ✅ **I'm active and ready to play music!
 • Start time: `{START_TIME_ISO}`
-
-> Click on button » 📚 **Command** and see all bot commands!
 """,
         reply_markup=InlineKeyboardMarkup(
             [
@@ -124,7 +122,7 @@ async def help_(client: Client, message: Message):
 
 
 @Client.on_message(filters.command(["ping", f"ping@{BOT_USERNAME}"]) & ~filters.edited)
-@authorized_users_only
+@sudo_users_only
 async def ping_pong(client: Client, message: Message):
     start = time()
     m_reply = await message.reply_text("pinging...")
