@@ -9,7 +9,7 @@ from helpers.decorators import sudo_users_only, errors
 downloads = os.path.realpath("downloads")
 raw = os.path.realpath("raw_files")
 
-@Client.on_message(command(["rmd", "rmdownload"]) & ~filters.edited)
+@Client.on_message(command(["rmdd", "rmdownload"]) & ~filters.edited)
 @errors
 @sudo_users_only
 async def clear_downloads(_, message: Message):
