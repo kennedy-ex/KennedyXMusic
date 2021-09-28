@@ -591,13 +591,13 @@ async def play(_, message: Message):
           await lel.edit("Give me something to play")
         # Looks like hell. Aren't it?? FUCK OFF
         try:
-            toxxt = "**__Choose the song you want to play__**\n\n"
+            toxxt = "\n"
             j = 0
             useer=user_name
             emojilist = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣"]
             while j < 5:
                 toxxt += f"{emojilist[j]} [{results[j]['title'][:24]}...](https://youtube.com{results[j]['url_suffix']})\n"
-                toxxt += f" ├ 💡 Duration - {results[j]['duration']}\n"
+                toxxt += f" ├ 💡 [More Information](https://youtube.com{results[j]['url_suffix']}\n"
                 toxxt += f" └ ⚡ __Powered by [{bn}](https://t.me/{BOT_USERNAME})__\n\n"
                 j += 1            
             keyboard = InlineKeyboardMarkup(
@@ -614,7 +614,13 @@ async def play(_, message: Message):
                     [InlineKeyboardButton(text="🗑 Close", callback_data="cls")],
                 ]
             )
-            await lel.edit(toxxt,reply_markup=keyboard,disable_web_page_preview=True)
+            await message.reply_photo(
+                photo="https://telegra.ph/file/234e2fff6228fd58de469.png",
+                caption=toxxt,
+                reply_markup=keyboard
+            )
+
+            await lel.delete()
             # WHY PEOPLE ALWAYS LOVE PORN ?? (A point to think)
             return
             # KONTOOOOOLLLLLLLLLLL
