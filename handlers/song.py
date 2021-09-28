@@ -16,10 +16,12 @@ from pyrogram.types import Message
 from youtube_search import YoutubeSearch
 from youtubesearchpython import SearchVideos
 from helpers.filters import command
+from helpers.decorators import sudo_users_only
 from config import DURATION_LIMIT, BOT_USERNAME, BOT_NAME
 
 
-@Client.on_message(filters.command(["song", f"song@{BOT_USERNAME}"]) & ~filters.channel)
+@Client.on_message(filters.command(["song", f"song@{BOT_USERNAME}"]) & ~filters.group)
+@sudo_users_only
 def song(client, message):
     user_id = message.from_user.id
     user_name = message.from_user.first_name
@@ -234,6 +236,7 @@ def time_to_seconds(time):
 
 
 @Client.on_message(command(["video", f"video@{BOT_USERNAME}"]))
+@sudo_users_only
 async def ytmusic(client, message: Message):
     global is_downloading
     if is_downloading:
