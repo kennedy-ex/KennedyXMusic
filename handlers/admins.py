@@ -37,7 +37,7 @@ async def pause(client, message):
         await message.reply_text("eweh anjg")
     else:
         callsmusic.pytgcalls.pause_stream(chat_id)
-        await client.send_message("▶️ **Music paused!**\n\n• To resume music playback, use **command » /resume**")
+        await client.send_message(message.chat.id, "▶️ **Music paused!**\n\n• To resume music playback, use **command » /resume**")
 
 
 @Client.on_message(command(["resume", f"resume@{BOT_USERNAME}"]) & other_filters)
@@ -51,7 +51,7 @@ async def resume(client, message):
         await message.reply_text("eweh anjg")
     else:
         callsmusic.pytgcalls.resume_stream(chat_id)
-        await client.send_message("⏸ **Music resumed!**\n\n• To pause music playback, use **command » /pause**")
+        await client.send_message(message.chat.id, "⏸ **Music resumed!**\n\n• To pause music playback, use **command » /pause**")
 
 
 @Client.on_message(command(["end", f"end@{BOT_USERNAME}"]) & other_filters)
@@ -68,7 +68,7 @@ async def stop(client, message):
             pass
 
         callsmusic.pytgcalls.leave_group_call(chat_id)
-        await client.send_message("✅ __The **Userbot has disconnected from voice chat**__")
+        await client.send_message(message.chat.id, "✅ __The **Userbot has disconnected from voice chat**__")
 
 
 @Client.on_message(command("skip") & other_filters)
@@ -94,4 +94,4 @@ async def skip(client, message):
         skip = qeue.pop(0)
     if not qeue:
         return
-    await client.send_message(f"⏭️ **__You've skipped to the next song__**")
+    await client.send_message(message.chat.id, f"⏭️ **__You've skipped to the next song__**")
