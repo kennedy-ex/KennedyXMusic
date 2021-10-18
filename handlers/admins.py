@@ -29,7 +29,7 @@ async def update_admin(client, message):
 @Client.on_message(command(["pause", f"pause@{BOT_USERNAME}"]) & other_filters)
 @errors
 @authorized_users_only
-async def pause(_, client, message: Message):
+async def pause(client, message):
     chat_id = get_chat_id(message.chat)
     if (chat_id not in callsmusic.pytgcalls.active_calls) or (
         callsmusic.pytgcalls.active_calls[chat_id] == "paused"
@@ -42,7 +42,7 @@ async def pause(_, client, message: Message):
 @Client.on_message(command(["resume", f"resume@{BOT_USERNAME}"]) & other_filters)
 @errors
 @authorized_users_only
-async def resume(_, client, message: Message):
+async def resume(client, message):
     chat_id = get_chat_id(message.chat)
     if (chat_id not in callsmusic.pytgcalls.active_calls) or (
         callsmusic.pytgcalls.active_calls[chat_id] == "playing"
@@ -55,7 +55,7 @@ async def resume(_, client, message: Message):
 @Client.on_message(command(["end", f"end@{BOT_USERNAME}"]) & other_filters)
 @errors
 @authorized_users_only
-async def stop(_, client, message: Message):
+async def stop(client, message):
     chat_id = get_chat_id(message.chat)
     if chat_id not in callsmusic.pytgcalls.active_calls:
     else:
@@ -71,7 +71,7 @@ async def stop(_, client, message: Message):
 @Client.on_message(command("skip") & other_filters)
 @errors
 @authorized_users_only
-async def skip(_, client, message: Message):
+async def skip(client, message):
     global que
     chat_id = get_chat_id(message.chat)
     if chat_id not in callsmusic.pytgcalls.active_calls:
