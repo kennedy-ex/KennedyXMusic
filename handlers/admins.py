@@ -33,6 +33,7 @@ async def pause(client, message):
     chat_id = get_chat_id(message.chat)
     if (chat_id not in callsmusic.pytgcalls.active_calls) or (
         callsmusic.pytgcalls.active_calls[chat_id] == "paused"
+        await message.reply_text("eweh anjg")
     ):
     else:
         callsmusic.pytgcalls.pause_stream(chat_id)
@@ -46,6 +47,7 @@ async def resume(client, message):
     chat_id = get_chat_id(message.chat)
     if (chat_id not in callsmusic.pytgcalls.active_calls) or (
         callsmusic.pytgcalls.active_calls[chat_id] == "playing"
+        await message.reply_text("eweh anjg")
     ):
     else:
         callsmusic.pytgcalls.resume_stream(chat_id)
@@ -58,6 +60,7 @@ async def resume(client, message):
 async def stop(client, message):
     chat_id = get_chat_id(message.chat)
     if chat_id not in callsmusic.pytgcalls.active_calls:
+        await message.reply_text("eweh anjg")
     else:
         try:
             queues.clear(chat_id)
@@ -75,6 +78,7 @@ async def skip(client, message):
     global que
     chat_id = get_chat_id(message.chat)
     if chat_id not in callsmusic.pytgcalls.active_calls:
+        await message.reply_text("eweh anjg")
     else:
         queues.task_done(chat_id)
 
