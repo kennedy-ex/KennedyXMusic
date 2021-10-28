@@ -348,17 +348,6 @@ def menus(type_):
 
 
 @Client.on_callback_query(
-    filters.regex(pattern=r"^(menus)$")
-)
-async def bt_mns(b, cb):
-    type_ = cb.matches[0].group(1)
-    cb.message.chat.id
-    if type_ == "menus":
-        await cb.answer("Menu Opened")
-        await cb.edit(puki, reply_markup=kontols)
-
-
-@Client.on_callback_query(
     filters.regex(pattern=r"^(play|pause|skip|leave|puse|resume|menu|cls)$")
 )
 @cb_admin_check
