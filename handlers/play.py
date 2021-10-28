@@ -306,6 +306,33 @@ async def bt_cls(b, cb):
 
 
 @Client.on_callback_query(
+    filters.regex(pattern=r"^(menus)$")
+)
+async def bt_mns(b, cb):
+    type_ = cb.matches[0].group(1)
+    cb.message.chat.id
+    if type_ == "menus":
+        await cb.answer("Closed Thumbnail")
+        await cb.message.edit(stats),
+    kontol = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("⏹", "leave"),
+                InlineKeyboardButton("⏸", "puse"),
+                InlineKeyboardButton("▶️", "resume"),
+                InlineKeyboardButton("⏭", "skip")
+            ],
+            [
+                InlineKeyboardButton("📖 Playlist", "playlist"),
+            ],
+            [       
+                InlineKeyboardButton("🗑 Close", "cls")
+            ]        
+        ]
+    )
+
+
+@Client.on_callback_query(
     filters.regex(pattern=r"^(play|pause|skip|leave|puse|resume|menu|cls)$")
 )
 @cb_admin_check
@@ -580,13 +607,12 @@ async def play(_, message: Message):
         keyboard = InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("🔔 Support ", url=f"https://t.me/{GROUP_SUPPORT}"),
+                    InlineKeyboardButton("• Menu ", callback_data="menus"),
                     InlineKeyboardButton("🗑️ Close", callback_data="closed"),
                 ]
             ]
         )
-        file_name = get_file_name(audio)
-        title = file_name
+        title = audio.title
         thumb_name = "https://telegra.ph/file/f6086f8909fbfeb0844f2.png"
         thumbnail = thumb_name
         ctitle = message.chat.title
@@ -627,7 +653,7 @@ async def play(_, message: Message):
         keyboard = InlineKeyboardMarkup(
          [
             [
-                InlineKeyboardButton("🔔 Support", url=f"https://t.me/{GROUP_SUPPORT}"),
+                InlineKeyboardButton("• Menu ", callback_data="menus"),
                 InlineKeyboardButton("🗑️ Close", callback_data="closed"),
             ]
          ]
@@ -718,7 +744,7 @@ async def play(_, message: Message):
             keyboard = InlineKeyboardMarkup(
                  [
             [
-                InlineKeyboardButton("🔔 Support", url=f"https://t.me/{GROUP_SUPPORT}"),
+                InlineKeyboardButton("• Menu ", callback_data="menus"),
                 InlineKeyboardButton("🗑️ Close", callback_data="closed"),
             ],
         ]
@@ -818,7 +844,7 @@ async def lol_cb(b, cb):
     keyboard = InlineKeyboardMarkup(
      [
         [
-            InlineKeyboardButton("🔔 Support", url=f"https://t.me/{GROUP_SUPPORT}"),
+            InlineKeyboardButton("• Menu ", callback_data="menus"),
             InlineKeyboardButton("🗑️ Close", callback_data="closed"),
         ]
      ]
@@ -976,7 +1002,7 @@ async def ytplay(_, message: Message):
     keyboard = InlineKeyboardMarkup(
      [
         [
-            InlineKeyboardButton("🔔 Support", url=f"https://t.me/{GROUP_SUPPORT}"),
+            InlineKeyboardButton("• Menu ", callback_data="menus"),
             InlineKeyboardButton("🗑️ Close", callback_data="closed"),
         ]
      ]
