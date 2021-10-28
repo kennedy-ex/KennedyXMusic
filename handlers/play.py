@@ -305,7 +305,7 @@ async def bt_cls(b, cb):
         await cb.message.delete()
 
 
-==============kontols================
+# ==============kontols================
 @Client.on_callback_query(
     filters.regex(pattern=r"^(menus)$")
 )
