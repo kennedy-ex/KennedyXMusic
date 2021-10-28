@@ -18,6 +18,7 @@ Pillow
 pyaml
 psutil
 yt-dlp
+youtube-dl
 bs4
 psutil
 wget
