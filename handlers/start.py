@@ -27,6 +27,7 @@ from helpers.filters import command
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from helpers.decorators import sudo_users_only, authorized_users_only
+from helpers.functions import get_yt_details, download_yt_thumbnails
 
 
 START_TIME = datetime.utcnow()
@@ -49,45 +50,6 @@ async def _human_time_duration(seconds):
             parts.append('{} {}{}'
                          .format(amount, unit, "" if amount == 1 else "s"))
     return ', '.join(parts)
-
-
-@Client.on_message(command("start") & filters.private & ~filters.edited)
-async def start_(client: Client, message: Message):
-    await message.reply_text(
-        f"""<b>✨ Welcome {message.from_user.mention()}!</b>
-
-**💭 [{BOT_NAME}](https://t.me/{GROUP_SUPPORT}) allows you to play music on groups through the new Telegram's voice chats!**
-
-💡 Find out all the **Bot's commands** and how they work by clicking on the **» 📚 Commands** button!""",
-        reply_markup=InlineKeyboardMarkup(
-            [ 
-                [
-                    InlineKeyboardButton(
-                        "➕ Add me to your group ➕", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")
-                ],[
-                    InlineKeyboardButton(
-                        "📚 Command​​", callback_data="cbhelp"
-                    ),
-                    InlineKeyboardButton(
-                        "❤️ Donate", url=f"https://t.me/{OWNER_NAME}")
-                ],[
-                    InlineKeyboardButton(
-                        "👥 Official Group​​", url=f"https://t.me/{GROUP_SUPPORT}"
-                    ),
-                    InlineKeyboardButton(
-                        "📣 Official Channel", url=f"https://t.me/{UPDATES_CHANNEL}")
-                ],[
-                    InlineKeyboardButton(
-                        "🌐 Source Code", url=f"{UPSTREAM_REPO}")
-                ],[
-                    InlineKeyboardButton(
-                        "❔ About me​​", callback_data="cbabout"
-                    )
-                ]
-            ]
-        ),
-     disable_web_page_preview=True
-    )
 
 
 @Client.on_message(command(["start", f"start@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
@@ -115,9 +77,86 @@ async def start(client: Client, message: Message):
     )
 
 
-@Client.on_message(command("kontol") & filters.private & ~filters.edited)
-async def kontol(client: Client, message: Message):
-    await message.reply_text("**Bijimane caranya komsol**")
+@Client.on_message(filters.command("start"))
+async def start_(_, message: types.Message):
+    user_id = message.from_user.id
+    if message.chat.type == "supergroup":
+        return await message.reply(
+            f"<b>✨ Welcome {message.from_user.mention()}!</b>\n"
+
+            f"**💭 [{BOT_NAME}](https://t.me/{GROUP_SUPPORT}) allows you to play music on groups through the new Telegram's voice chats!**\n"
+
+            "💡 Find out all the **Bot's commands** and how they work by clicking on the **» 📚 Commands** button!\n",
+        )
+    if message.chat.type == "private":
+        if len(message.command) == 1:
+            await message.reply(
+                f"hi {message.from_user.mention}! i can play musics on your groups through"
+                "telegram voice chats\n"
+                f"{emoji.LIGHT_BULB} find out all my command by clicking \"commands\" button",
+                reply_markup=InlineKeyboardMarkup(
+                    [ 
+                        [
+                            InlineKeyboardButton(
+                                "➕ Add me to your group ➕", url=f"https://t.me/{BOT_USERNAME}?startgroup=true")
+                        ],[
+                            InlineKeyboardButton(
+                               "📚 Command​​", callback_data="cbhelp"
+                            ),
+                            InlineKeyboardButton(
+                               "❤️ Donate", url=f"https://t.me/{OWNER_NAME}")
+                        ],[
+                            InlineKeyboardButton(
+                               "👥 Official Group​​", url=f"https://t.me/{GROUP_SUPPORT}"
+                            ),
+                            InlineKeyboardButton(
+                               "📣 Official Channel", url=f"https://t.me/{UPDATES_CHANNEL}")
+                         ],[
+                            InlineKeyboardButton(
+                               "🌐 Source Code", url=f"{UPSTREAM_REPO}")
+                        ],[
+                            InlineKeyboardButton(
+                               "❔ About me​​", callback_data="cbabout"
+                            )
+                        ]
+                    ]
+                ),
+             disable_web_page_preview=True
+            )
+        elif len(message.command) == 2:
+            query = message.command[1]
+            if query.startswith("ytinfo_"):
+                yt_link = query.split("ytinfo_")[1]
+                details = get_yt_details(yt_link)
+                thumb_url = details["thumbnails"]
+                thumb_file = download_yt_thumbnails(thumb_url, user_id)
+                result_text = (
+                    f"**track information**\n\n"
+                    f"🏷️ **title**: {details['title']}\n"
+                    f"💭 **channel**: {details['channel']}\n"
+                    f"⏱️ **duration**: {details['duration']}\n"
+                    f"👍🏻 **likes**: {details['likes']}\n"
+                    f"👎🏻 **dislikes**: {details['dislikes']}\n"
+                    f"⭐ **rating**: {details['rating']}\n"
+                )
+                await message.reply_photo(
+                    thumb_file, caption=result_text, reply_markup=markup_keyboard(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    f"🗂️ watch on youtube",
+                                    url=f"{details['link']}"
+                                )
+                            ],
+                            [
+                                InlineKeyboardButton(
+                                    f"🗑️ close",
+                                    callback_data="cls"
+                                )
+                            ]
+                        ]
+                    )
+                )
 
 
 @Client.on_message(command(["help", f"help@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
