@@ -15,7 +15,6 @@ search_engine_parser
 future
 ffmpeg-python
 Pillow
-future
 pyaml
 psutil
 yt-dlp
