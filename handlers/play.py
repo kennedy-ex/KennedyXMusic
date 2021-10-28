@@ -305,31 +305,30 @@ async def bt_cls(b, cb):
         await cb.message.delete()
 
 
-
-def updated_stats(chat, queue, vol=100):
-    if chat.id in callsmusic.pytgcalls.active_calls:
-        stats = "⚙️ Settings from **{}**".format(chat.title)
-        if len(que) > 0:
-            stats += "\n\n"
-            stats += "🎚️ Volume: {}%\n".format(vol)
-            stats += "🎼 Song in queue: `{}`\n".format(len(que))
-            stats += "💡 Now playing: **{}**\n".format(queue[0][0])
-            stats += "🎧 Requested by: {}".format(queue[0][1].mention)
-    else:
-        stats = None
-    return stats
-
-
+==============kontols================
 @Client.on_callback_query(
     filters.regex(pattern=r"^(menus)$")
 )
 async def bt_mns(b, cb):
+    if chat.id in callsmusic.pytgcalls.active_calls:
+        puki = "⚙️ Settings from **{}**".format(chat.title)
+        if len(que) > 0:
+            puki += "\n\n"
+            puki += "🎚️ Volume: {}%\n".format(vol)
+            puki += "🎼 Song in queue: `{}`\n".format(len(que))
+            puki += "💡 Now playing: **{}**\n".format(queue[0][0])
+            puki += "🎧 Requested by: {}".format(queue[0][1].mention)
+    else:
+        puki = None
+    return puki
+
+def menus(type_):
     type_ = cb.matches[0].group(1)
     cb.message.chat.id
-    if type_ == "menus":
-        await cb.answer("Menu Opened")
-        await cb.message.edit(stats),
-    kontol = InlineKeyboardMarkup(
+        pass
+    else:
+        pass
+    kontols = InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton("⏹", "leave"),
@@ -345,6 +344,18 @@ async def bt_mns(b, cb):
             ]        
         ]
     )
+    return kontols
+
+
+@Client.on_callback_query(
+    filters.regex(pattern=r"^(menus)$")
+)
+async def bt_mns(b, cb):
+    type_ = cb.matches[0].group(1)
+    cb.message.chat.id
+    if type_ == "menus":
+        await cb.answer("Menu Opened")
+        await cb.edit(puki, reply_markup=kontols)
 
 
 @Client.on_callback_query(
