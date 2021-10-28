@@ -78,7 +78,7 @@ async def start(client: Client, message: Message):
 
 
 @Client.on_message(filters.command("start"))
-async def start_(_, message: types.Message):
+async def start_(_, message: Message):
     user_id = message.from_user.id
     if message.chat.type == "supergroup":
         return await message.reply(
