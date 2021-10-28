@@ -115,6 +115,10 @@ async def start(client: Client, message: Message):
     )
 
 
+async def kontol(client: Client, message: Message):
+    await message.reply_text("**Bijimane caranya komsol**")
+
+
 @Client.on_message(command(["help", f"help@{BOT_USERNAME}"]) & filters.group & ~filters.edited)
 async def help(client: Client, message: Message):
     await message.reply_text(
