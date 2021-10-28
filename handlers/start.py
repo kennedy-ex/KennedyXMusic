@@ -115,6 +115,7 @@ async def start(client: Client, message: Message):
     )
 
 
+@Client.on_message(command("kontol") & filters.private & ~filters.edited)
 async def kontol(client: Client, message: Message):
     await message.reply_text("**Bijimane caranya komsol**")
 
