@@ -803,8 +803,7 @@ async def play(_, message: Message):
                 ]
             ]
         )
-        file_name = get_file_name(audio)
-        title = file_name
+        title = get_file_name(voice)
         thumb_name = "https://telegra.ph/file/f6086f8909fbfeb0844f2.png"
         thumbnail = thumb_name
         ctitle = message.chat.title
