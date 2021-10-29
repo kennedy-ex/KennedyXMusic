@@ -856,20 +856,20 @@ async def play(_, message: Message):
         file_path = await converter.convert(youtube.download(url))
         chat_id = get_chat_id(message.chat)
         if chat_id in callsmusic.pytgcalls.active_calls:
-        position = await queues.put(chat_id, file=file_path)
-        qeue = que.get(chat_id)
-        s_name = title
-        url = message.reply_to_message.link
-        r_by = message.from_user
-        loc = file_path
-        appendable = [s_name, r_by, loc]
-        qeue.append(appendable)
-        await lel.delete()
-        await _.send_photo(chid,
-            photo="final.png",
-            caption=f"🏷 **Name:** [Telegram audio file]({url})\n⏱ **Duration:** `{duration}`\n🎧 **Request by:** {message.from_user.mention}\n\n🔢 Track position » `{position}`",
-            reply_markup=keyboard
-        )
+            position = await queues.put(chat_id, file=file_path)
+            qeue = que.get(chat_id)
+            s_name = title
+            url = message.reply_to_message.link
+            r_by = message.from_user
+            loc = file_path
+            appendable = [s_name, r_by, loc]
+            qeue.append(appendable)
+            await lel.delete()
+            await _.send_photo(chid,
+                photo="final.png",
+                caption=f"🏷 **Name:** [Telegram audio file]({url})\n⏱ **Duration:** `{duration}`\n🎧 **Request by:** {message.from_user.mention}\n\n🔢 Track position » `{position}`",
+                reply_markup=keyboard
+            )
     else:
         chat_id = get_chat_id(message.chat)
         que[chat_id] = []
