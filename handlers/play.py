@@ -531,7 +531,7 @@ async def play(_, message: Message):
         return
     text_links=None
     if message.reply_to_message:
-        if message.reply_to_message.audio or message.reply_to_message.voice:
+        if message.reply_to_message.audio:
             pass
         entities = []
         if message.entities:
@@ -576,7 +576,7 @@ async def play(_, message: Message):
             ]
         )
         file_name = get_file_name(audio)
-        title = file_name
+        title = audio.file
         thumb_name = "https://telegra.ph/file/f6086f8909fbfeb0844f2.png"
         thumbnail = thumb_name
         ctitle = message.chat.title
@@ -719,6 +719,143 @@ async def play(_, message: Message):
             file_path = await converter.convert(youtube.download(url))   
     chat_id = get_chat_id(message.chat)
     if chat_id in callsmusic.pytgcalls.active_calls:
+        position = await queues.put(chat_id, file=file_path)
+        qeue = que.get(chat_id)
+        s_name = title
+        url = message.reply_to_message.link
+        r_by = message.from_user
+        loc = file_path
+        appendable = [s_name, r_by, loc]
+        qeue.append(appendable)
+        await lel.delete()
+        await _.send_photo(chid,
+            photo="final.png",
+            caption=f"🏷 **Name:** [{title}]({url})\n⏱ **Duration:** `{duration}`\n🎧 **Request by:** {message.from_user.mention}\n\n🔢 Track position » `{position}`",
+            reply_markup=keyboard
+        )
+    else:
+        chat_id = get_chat_id(message.chat)
+        que[chat_id] = []
+        qeue = que.get(chat_id)
+        s_name = title
+        url = message.reply_to_message.link
+        r_by = message.from_user
+        loc = file_path
+        appendable = [s_name, r_by, loc]
+        qeue.append(appendable)
+        try:
+            callsmusic.pytgcalls.join_group_call(chat_id, file_path)
+        except:
+            message.reply("😕 **voice chat not found**\n\n» please turn on the voice chat first")
+            return
+        await lel.delete()
+        await _.send_photo(chid,
+            photo="final.png",
+            caption = f"🏷 **Name:** [{title}]({url})\n⏱ **duration:** `{duration}`\n💡 **Status:** `Playing`\n" \
+                    + f"🎧 **Request by:** {r_by.mention} \n",
+            reply_markup=keyboard
+        )
+        os.remove("final.png")
+        return
+    text_links=None
+    if message.reply_to_message:
+        if message.reply_to_message.audio or message.reply_to_message.voice:
+            pass
+        entities = []
+        if message.entities:
+            entities += entities
+        elif message.caption_entities:
+            entities += message.caption_entities
+        if message.reply_to_message:
+            text = message.reply_to_message.text \
+                or message.reply_to_message.caption
+            if message.reply_to_message.entities:
+                entities = message.reply_to_message.entities + entities
+        else:
+            text = message.text or message.caption
+
+        urls = [entity for entity in entities if entity.type == 'url']
+        text_links = [
+            entity for entity in entities if entity.type == 'text_link'
+        ]
+    else:
+        urls=None
+    if text_links:
+        urls = True
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+    rpk = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
+    audio = (
+        (message.reply_to_message.audio or message.reply_to_message.voice)
+        if message.reply_to_message
+        else None
+    )
+    if audio:
+        if round(audio.duration / 60) > DURATION_LIMIT:
+            raise DurationLimitError(
+                f"❌ **music with duration more than** `{DURATION_LIMIT}` **minutes, can't play !**"
+            )
+        keyboard = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton("🎚️ Menu ", callback_data="menu"),
+                    InlineKeyboardButton("🗑️ Close", callback_data="closed"),
+                ]
+            ]
+        )
+        file_name = get_file_name(audio)
+        title = file_name
+        thumb_name = "https://telegra.ph/file/f6086f8909fbfeb0844f2.png"
+        thumbnail = thumb_name
+        ctitle = message.chat.title
+        ctitle = await CHAT_TITLE(ctitle)
+        duration = convert_seconds(audio.duration)
+        views = "Locally added"
+        requested_by = message.from_user.first_name
+        await generate_cover(title, thumbnail, ctitle)
+        file_path = await converter.convert(
+            (await message.reply_to_message.download(file_name))
+            if not path.isfile(path.join("downloads", file_name))
+            else file_name
+        )
+    elif urls:
+        query = toxt
+        await lel.edit("🔎 **Searching**")
+        ydl_opts = {"format": "bestaudio[ext=m4a]"}
+        try:
+            results = YoutubeSearch(query, max_results=1).to_dict()
+            url = f"https://youtube.com{results[0]['url_suffix']}"
+            # print(results)
+            title = results[0]["title"]
+            thumbnail = results[0]["thumbnails"][0]
+            thumb_name = f"{title}.jpg"
+            ctitle = message.chat.title
+            ctitle = await CHAT_TITLE(ctitle)
+            thumb = requests.get(thumbnail, allow_redirects=True)
+            open(thumb_name, "wb").write(thumb.content)
+            duration = results[0]["duration"]
+            results[0]["url_suffix"]
+            views = results[0]["views"]
+        except Exception as e:
+            await lel.delete()
+            await lel.edit("❌ **couldn't find song**")
+            print(str(e))
+            return
+        dlurl=url
+        dlurl=dlurl.replace("youtube","youtubepp")
+        keyboard = InlineKeyboardMarkup(
+         [
+            [
+                InlineKeyboardButton("🎚️ Menu ", callback_data="menu"),
+                InlineKeyboardButton("🗑️ Close", callback_data="closed"),
+            ]
+         ]
+        )
+        requested_by = message.from_user.first_name
+        await generate_cover(title, thumbnail, ctitle)
+        file_path = await converter.convert(youtube.download(url))
+        chat_id = get_chat_id(message.chat)
+        if chat_id in callsmusic.pytgcalls.active_calls:
         position = await queues.put(chat_id, file=file_path)
         qeue = que.get(chat_id)
         s_name = title
